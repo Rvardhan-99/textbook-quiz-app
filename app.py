@@ -39,7 +39,6 @@ def generate_questions(text):
         },
         {
             "template": "What is the purpose of '{keyword}' in the context?",
-           ns
             "correct_gen": lambda k, ctx: f"It is used in {ctx or 'the process described'}.",
             "incorrect_gen": lambda k, others: [
                 f"It is a minor detail unlike {random.choice(others) if others else 'other terms'}.",
