@@ -103,7 +103,7 @@ def main():
         st.session_state.show_score = False
 
     # Generate Quiz button
-    if st.button("Generate Quiz", disabled=not textbook_content):
+    if st.button("Generate Quiz", textbook_content):
         if textbook_content:
             st.session_state.questions = generate_questions(textbook_content)
             st.session_state.current_question_index = 0
