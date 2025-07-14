@@ -30,7 +30,7 @@ def generate_questions(text):
     question_types = [
         {
             "template": "What does '{keyword}' refer to in the text?",
-            "correct_gen": lambda k, ctx: f"It refers to {ctx or 'a main concept'}.",
+            "correct_gen": lambda k, ctx, others: f"It refers to {ctx or 'a main concept'}.",
             "incorrect_gen": lambda k, others: [
                 f"It is similar to {random.choice(others) if others else 'another term'}.",
                 "It is an unrelated term.",
@@ -39,7 +39,7 @@ def generate_questions(text):
         },
         {
             "template": "What is the purpose of '{keyword}' in the context?",
-            "correct_gen": lambda k, ctx: f"It is used in {ctx or 'the process described'}.",
+            "correct_gen": lambda k, ctx, others: f"It is used in {ctx or 'the process described'}.",
             "incorrect_gen": lambda k, others: [
                 f"It is a minor detail unlike {random.choice(others) if others else 'other terms'}.",
                 "It serves no purpose.",
@@ -48,7 +48,7 @@ def generate_questions(text):
         },
         {
             "template": "How does '{keyword}' relate to another idea in the text?",
-            "correct_gen": lambda k, ctx: f"It is linked to {random.choice(others) if others else 'the main topic'} in the text.",
+            "correct_gen": lambda k, ctx, others: f"It is linked to {random.choice(others) if others else 'the main topic'} in the text.",
             "incorrect_gen": lambda k, others: [
                 f"It is unrelated to {random.choice(others) if others else 'other ideas'}.",
                 "It opposes the main idea.",
@@ -61,8 +61,8 @@ def generate_questions(text):
         q_type = random.choice(question_types)
         context = find_context(keyword, text)
         question_text = q_type["template"].format(keyword=keyword)
-        correct_answer = q_type["correct_gen"](keyword, context)
         other_keywords = [kw for kw in keywords if kw != keyword]
+        correct_answer = q_type["correct_gen"](keyword, context, other_keywords)
         incorrect_options = q_type["incorrect_gen"](keyword, other_keywords)
         options = [correct_answer] + incorrect_options
         random.shuffle(options)
